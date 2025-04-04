@@ -37,7 +37,6 @@
 
 TYPE ABOUT THE PROJECT HERE
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -74,7 +73,6 @@ This is an example of how to list things you need to use the software and how to
    git remote -v # confirm the changes
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -84,8 +82,6 @@ This is an example of how to list things you need to use the software and how to
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -104,13 +100,9 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Top contributors:
 
-<a href="https://github.com/github_username/repo_name/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=github_username/repo_name" alt="contrib.rocks image" />
-</a>
 
 
 
@@ -119,18 +111,20 @@ Don't forget to give the project a star! Thanks again!
 
 Distributed under the project_license. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Team members: 
+Madeline Oesch (oeschmad@umich.edu),
+Ramya Prakash (ramyapk@umich.edu),
+Aniruddh Aithal (aithalan@umich.edu),
+Brooke Lee (brojlee@umich.edu)
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: https://github.com/oeschmad/team-18-FinOpAI-capstone
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -141,4 +135,3 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 * []()
 * []()
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
