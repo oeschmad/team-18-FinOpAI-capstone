@@ -1,7 +1,10 @@
-<h3 align="center">project_title</h3>
+<h3 align="center">AI-Driven Portfolio Optimization for Investors</h3>
 
   <p align="center">
-    project_description
+    This project develops an AI-driven portfolio optimization system leveraging reinforcement learning 
+(RL) to dynamically allocate investments across stocks, bonds, cryptocurrencies, and commodities. 
+The approach integrates financial market data, economic indicators, and user risk profiles to provide 
+personalized investment strategies.
     <br />
     <br />
     <br />
