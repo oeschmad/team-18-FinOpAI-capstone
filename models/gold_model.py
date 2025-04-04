@@ -17,7 +17,7 @@ today = date.today()
 #Define features and target
 features = ['inflation', 'stock_violatility', 'usd_strength', 'gold_lag1', 'gold_lag7', 'gold_lag14', 'gold_7d_avg', 'gold_14d_avg',
             'gold_30d_avg', 'oil', 'geo_resources', 'gold_vol_7d','gold_vol_30d', 'fed_funds_rate', 'GDP_growth',
-            'unemployment', 'silver_price_change', 'platinum_price_change',	'palladium_price_change']
+            'unemployment', 'silver_price_change', 'platinum_price_change','palladium_price_change']
 
 target = "gold_price_change"
 
