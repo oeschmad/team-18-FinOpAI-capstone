@@ -1,28 +1,21 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from datetime import date
-
-import yfinance as yf
-from fredapi import Fred
-
 import xgboost as xgb
-from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
+from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.model_selection import RandomizedSearchCV
 
-df = pd.read_csv('data/gold_data.csv')
-today = date.today()
-
-#Define features and target
+# Define features and target
 features = ['inflation', 'stock_violatility', 'usd_strength', 'gold_lag1', 'gold_lag7', 'gold_lag14', 'gold_7d_avg', 'gold_14d_avg',
             'gold_30d_avg', 'oil', 'geo_resources', 'gold_vol_7d','gold_vol_30d', 'fed_funds_rate', 'GDP_growth',
             'unemployment', 'silver_price_change', 'platinum_price_change','palladium_price_change']
 
 target = "gold_price_change"
 
-def gold_model(features, target):
-    """this function takes 2 inputs, the features adn the target, and returns the best XGBoost Model"""
+def gold_model(features, target, csv_path):
+    """this function takes 3 inputs, the features, the target and the path to the csv file, 
+        and it returns the best XGBoost Model"""
+
+    df = pd.read_csv(csv_path)
 
     X = df[features]
     y = df[target]
@@ -47,12 +40,12 @@ def gold_model(features, target):
     xgb_model = xgb.XGBRegressor(objective="reg:squarederror")
     xgb_model.fit(X_train, y_train)
 
-    #Feature Importance
+    # Feature Importance
     importances = pd.Series(xgb_model.feature_importances_, index=features).sort_values(ascending=False)
     print("Feature Importances:\n", importances)
 
-    #Drop Least Important Features
-    drop_candidates = importances[importances < 0.02].index.tolist()  # Drop features with very low importance
+    # Drop Least Important Features
+    drop_candidates = importances[importances < 0.02].index.tolist()
 
     for drop_feature in drop_candidates:
         X_train_reduced = X_train.drop(columns=[drop_feature])
@@ -61,7 +54,7 @@ def gold_model(features, target):
     xgb_model_reduced = xgb.XGBRegressor(objective="reg:squarederror")
     xgb_model_reduced.fit(X_train_reduced, y_train)
 
-    #Tune Hyperparameters
+    # Tune Hyperparameters
     param_grid = {
         'n_estimators': [100, 300, 500],
         'learning_rate': [0.01, 0.05, 0.1, 0.2],
@@ -92,4 +85,4 @@ def gold_model(features, target):
 
     return best_model
 
-gold_model(features, target)
+gold_model(features, target, 'data/gold_data.csv')
