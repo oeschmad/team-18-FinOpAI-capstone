@@ -49,7 +49,7 @@ def prepare_model_inputs(df):
     return df[feature_cols]
 
 def predict_bonds(investment_horizon="3 Months",
-                  data_path='bond_final_data.csv',
+                  data_path='/data/bond_final_data.csv',
                   model_dir='models'):
     """
     Trains on all historical data and predicts future bond yields
