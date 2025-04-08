@@ -1,13 +1,4 @@
-<h3 align="center">AI-Driven Portfolio Optimization for Investors</h3>
-
-  <p align="center">
-    This project develops an AI-driven portfolio optimization system leveraging reinforcement learning 
-(RL) to dynamically allocate investments across stocks, bonds, cryptocurrencies, and commodities. 
-The approach integrates financial market data, economic indicators, and user risk profiles to provide 
-personalized investment strategies.
-    <br />
-    <br />
-    <br />
+<h3 align="center"> AI-Driven Portfolio Optimization for Investors</h3>
   </p>
 </div>
 
@@ -36,18 +27,30 @@ personalized investment strategies.
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+### About The Project
 
-TYPE ABOUT THE PROJECT HERE
+Many young, inexperienced investors struggle with structuring their portfolios due to overwhelming 
+information and market volatility. Traditional investment strategies, such as 60/40 allocation or 
+passive index investing, fail to adapt to changing market conditions and user-specific risk profiles. <br />
+This project develops an AI-driven portfolio optimization system leveraging reinforcement learning 
+(RL) to dynamically allocate investments across stocks, bonds, cryptocurrencies, and commodities. 
+The approach integrates financial market data, economic indicators, and user risk profiles to provide 
+personalized investment strategies.
+
+The system aims to: <br />
+* Classify investors based on risk tolerance using machine learning. <br />
+* Predict asset returns with deep learning models. <br />
+* Optimize portfolio allocation using an RL-based model. <br />
+* Provide an interactive dashboard for investment insights.<br />
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+### Getting Started
 STILL NEED TO UPDATE
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+#### Prerequisites
 STILL NEED TO UPDATE
 This is an example of how to list things you need to use the software and how to install them.
 * npm
@@ -55,7 +58,7 @@ This is an example of how to list things you need to use the software and how to
   npm install npm@latest -g
   ```
 
-### Installation
+#### Installation
 STILL NEED TO UPDATE
 1. Get a free API Key at [https://example.com](https://example.com)
 2. Clone the repo
@@ -80,7 +83,7 @@ STILL NEED TO UPDATE
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+### Usage
 STILL NEED TO UPDATE
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
@@ -90,7 +93,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 <!-- CONTRIBUTING -->
-## Contributing
+### Contributing
 STILL NEED TO UPDATE
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -104,13 +107,13 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 
-### Top contributors:
+#### Top contributors:
 STILL NEED TO UPDATE
 
 
 
 <!-- LICENSE -->
-## License
+### License
 STILL NEED TO UPDATE
 Distributed under the project_license. See `LICENSE.txt` for more information.
 
@@ -118,7 +121,7 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 
 
 <!-- CONTACT -->
-## Contact
+### Contact
 
 Team members: 
 Madeline Oesch (oeschmad@umich.edu),
@@ -132,7 +135,7 @@ Project Link: https://github.com/oeschmad/team-18-FinOpAI-capstone
 
 
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+### Acknowledgments
 
 * []()
 * []()
