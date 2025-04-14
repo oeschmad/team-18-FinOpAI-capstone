@@ -1,0 +1,46 @@
+import yfinance as yf
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense, Dropout
+
+def forecast_crypto_returns(tickers=['BTC-USD', 'ETH-USD'], start='2015-01-01', end='2025-01-01', forecast_days=30, seq_length=60):
+    crypto_returns = {}
+
+    for ticker in tickers:
+        df = yf.download(ticker, start=start, end=end)[['Close']].dropna()
+        scaler = MinMaxScaler()
+        scaled_data = scaler.fit_transform(df)
+
+        X, y = [], []
+        for i in range(seq_length, len(scaled_data)):
+            X.append(scaled_data[i-seq_length:i])
+            y.append(scaled_data[i])
+        X, y = np.array(X), np.array(y)
+
+        model = Sequential([
+            LSTM(50, return_sequences=True, input_shape=(seq_length, 1)),
+            Dropout(0.2),
+            LSTM(50),
+            Dropout(0.2),
+            Dense(25),
+            Dense(1)
+        ])
+        model.compile(optimizer='adam', loss='mean_squared_error')
+        model.fit(X, y, epochs=5, batch_size=32, verbose=0)
+
+        last_sequence = scaled_data[-seq_length:].reshape(1, seq_length, 1)
+        future_prices = []
+
+        for _ in range(forecast_days):
+            next_price_scaled = model.predict(last_sequence)[0][0]
+            future_prices.append(next_price_scaled)
+            last_sequence = np.append(last_sequence[:, 1:, :], [[[next_price_scaled]]], axis=1)
+
+        future_prices = scaler.inverse_transform(np.array(future_prices).reshape(-1, 1)).flatten()
+        returns = np.diff(future_prices) / future_prices[:-1]
+        dates = pd.date_range(start=df.index[-1] + pd.Timedelta(days=1), periods=forecast_days-1)
+        crypto_returns[ticker] = pd.Series(data=returns, index=dates)
+
+    return pd.DataFrame(crypto_returns)
