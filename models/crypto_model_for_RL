@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 
-def forecast_crypto_returns(tickers=['BTC-USD', 'ETH-USD'], start='2015-01-01', end='2025-01-01', forecast_days=30, seq_length=60):
+def forecast_crypto_returns(tickers=['BTC-USD', 'ETH-USD', 'BNB-USD', 'SOL-USD'], start='2015-01-01', end='2025-01-01', forecast_days=30, seq_length=60):
     crypto_returns = {}
 
     for ticker in tickers:
