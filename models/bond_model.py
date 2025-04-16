@@ -49,16 +49,19 @@ def prepare_model_inputs(df):
     return df[feature_cols]
 
 def predict_bonds(investment_horizon="3 Months",
-                  data_path='/data/bond_final_data.csv',
+                  data_path='bond_final_data.csv',
                   model_dir='models'):
     """
     Trains on all historical data and predicts future bond yields
     based on the investment horizon. Returns a forecast DataFrame.
     """
-    if investment_horizon not in HORIZON_TO_DAYS:
+    # Allow integer horizon as days directly
+    if isinstance(investment_horizon, int):
+        n_future_days = investment_horizon
+    elif investment_horizon in HORIZON_TO_DAYS:
+        n_future_days = HORIZON_TO_DAYS[investment_horizon]
+    else:
         raise ValueError(f"Unknown investment horizon: {investment_horizon}")
-
-    n_future_days = HORIZON_TO_DAYS[investment_horizon]
 
     if not os.path.exists(data_path):
         raise FileNotFoundError(f"No input data found at {data_path}")
@@ -95,7 +98,6 @@ def predict_bonds(investment_horizon="3 Months",
     ))
     model.fit(X, y)
 
-    # Rolling forecast
     forecast_rows = []
     current_df = df.copy()
     last_known_index = df.index[-1]
@@ -105,9 +107,13 @@ def predict_bonds(investment_horizon="3 Months",
         last_known_index = next_date
 
         latest = current_df.iloc[-1:].copy()
-        next_row = latest[BOND_COLS].copy()
-        for macro_col in MACRO_COLS:
-            next_row[macro_col] = latest[macro_col].values[0]
+
+        next_row = pd.DataFrame(index=[next_date])
+        for col in MACRO_COLS:
+            next_row[col] = latest[col].values[0]
+
+        for col in BOND_COLS:
+            next_row[col] = np.nan
 
         current_df = pd.concat([current_df, next_row])
         current_df = create_features(current_df)
@@ -115,6 +121,10 @@ def predict_bonds(investment_horizon="3 Months",
 
         X_next = prepare_model_inputs(current_df.iloc[[-1]])
         y_pred = model.predict(X_next)[0]
+
+        for i, col in enumerate(BOND_COLS):
+            current_df.at[next_date, col] = y_pred[i]
+
         forecast_rows.append((next_date, y_pred))
 
     forecast_df = pd.DataFrame(
@@ -128,13 +138,4 @@ def predict_bonds(investment_horizon="3 Months",
     print(f"[INFO] Generated bond forecast for next {n_future_days} days.")
     print(forecast_df.head())
     return forecast_df
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python bond_model.py '<Time Horizon>'")
-        print("Options:", list(HORIZON_TO_DAYS.keys()))
-        sys.exit(1)
-
-    user_horizon = sys.argv[1]
-    predict_bonds(investment_horizon=user_horizon)
 
