@@ -1,21 +1,32 @@
 # STEP 1: Set ngrok authtoken
 from pyngrok import ngrok
+import subprocess
+from PIL import Image
+import streamlit as st
+import time
 
-NGROK_AUTH_TOKEN = "2vOaH9lHauC1kgBndPtipPzh5DP_7ETtAUwfWeB9FkCFVgwMC"  # 🔁 Replace with your token
+
+NGROK_AUTH_TOKEN = "enter"  # Replace with your token
 ngrok.set_auth_token(NGROK_AUTH_TOKEN)
 
+
+app_code = """
 import streamlit as st
 import pandas as pd
 import os
-# from bond_model import predict_bonds
-import inspect
-from predict_bonds import predict_bonds
-print(inspect.signature(predict_bonds))
-import matplotlib.pyplot as plt
+import subprocess
+import plotly.express as px
+from PIL import Image
+import time
+
+from predict_risk import predict_risk
+from prepare_feature_matrix import prepare_feature_matrix
+from env import AssetAllocationEnv
+from ppo import PPOAgent
 
 # Set page config
-st.set_page_config(page_title="Risk Form", layout="centered")
-st.title("🛡️ Risk Assessment Form")
+st.set_page_config(page_title="AI Asset Allocator", layout="wide")
+st.title("🛡️ AI-Powered Asset Allocation Advisor")
 
 # 1. Basic Info
 st.header("👤 Personal Information")
@@ -29,22 +40,8 @@ marital_change = st.selectbox("Marital Status Change (past year)", options=[0, 1
 st.header("💼 Financial Profile")
 income = st.number_input("Annual Income ($)", min_value=0, step=1000)
 
-# Credit Score
 st.markdown("### 💳 Credit Score")
-auto_score = st.toggle("Estimate my credit score", value=True)
-if auto_score:
-    credit_category = st.selectbox("Select Credit Score Category", options=["Excellent", "Good", "Fair", "Poor", "Very Poor"])
-    score_map = {
-        "Excellent": 800,
-        "Good": 720,
-        "Fair": 650,
-        "Poor": 580,
-        "Very Poor": 500
-    }
-    credit_score = score_map[credit_category]
-    st.info(f"Estimated Score: {credit_score}")
-else:
-    credit_score = st.slider("Enter Your Credit Score", min_value=300, max_value=850, value=680)
+credit_score = st.slider("Credit Score", min_value=300, max_value=850, value=700)
 
 loan_amount = st.number_input("Loan Amount ($)", min_value=0, step=500)
 loan_purpose = st.selectbox("Loan Purpose", options=["Personal", "Auto", "Home", "Education", "Business"])
@@ -52,16 +49,11 @@ employment_status = st.selectbox("Employment Status", options=["Employed", "Unem
 years_at_job = st.slider("Years at Current Job", min_value=0, max_value=50, value=5)
 payment_history = st.selectbox("Payment History", options=["Good", "Fair", "Poor"])
 
-# Debt-to-Income Ratio
 st.markdown("### 📊 Debt-to-income ratio")
-auto_dti = st.toggle("Auto-calculate Debt-to-Income Ratio", value=True)
-if auto_dti:
-    monthly_debt = st.number_input("Monthly Debt Payments ($)", min_value=0)
-    monthly_income = st.number_input("Monthly Gross Income ($)", min_value=1)
-    dti = round(monthly_debt / monthly_income, 2)
-    st.success(f"Calculated DTI: {dti:.2f}")
-else:
-    dti = st.number_input("Enter your Debt-to-Income Ratio manually (0 to 1)", min_value=0.0, max_value=1.0, step=0.01)
+monthly_debt = st.number_input("Monthly Debt Payments ($)", min_value=0)
+monthly_income = st.number_input("Monthly Gross Income ($)", min_value=1)
+dti = round(monthly_debt / monthly_income, 2)
+st.success(f"Calculated DTI: {dti:.2f}")
 
 assets_value = st.number_input("Total Asset Value ($)", min_value=0, step=1000)
 
@@ -75,15 +67,15 @@ prev_defaults = st.slider("Previous Loan Defaults", min_value=0, max_value=5, va
 
 # 4. Investment Profile
 st.header("📈 Investment Preferences")
+investment_horizon = st.selectbox("Select your investment horizon:", [
+    "1 Day", "3 Days", "5 Days", "1 Week", "10 Days", "2 Weeks",
+    "1 Month", "3 Months", "6 Months", "1 Year", "2 Years", "3 Years"
+])
 
-st.markdown("Investment Time Horizon : refers to how long you plan to keep your money invested before you need it?")
 
-investment_horizon = st.selectbox("Select Your Investment Time Horizon", options=["1 Week", "1 Month", "3 Months", "6 Months", "More than 6 months"])
-
-# 5. Submit
 submit = st.button("✅ Submit and Predict Risk Rating")
-
 if submit:
+    # Save input to CSV
     input_df = pd.DataFrame([{
         "Age": age,
         "Gender": gender,
@@ -107,70 +99,71 @@ if submit:
         "Investment Horizon": investment_horizon
     }])
 
-    st.success("✅ Input data prepared for risk model")
-    st.dataframe(input_df)
-
     os.makedirs("inputs", exist_ok=True)
     input_df.to_csv("inputs/risk_input.csv", index=False)
-    st.info("Saved input to `inputs/risk_input.csv`")
+    st.info("✅ Saved input to `inputs/risk_input.csv`")
 
+    # Predict risk (optional)
     try:
-        from predict_risk import predict_risk
         rating = predict_risk()
         st.success(f"🧮 Predicted Risk Rating: **{rating}**")
     except Exception as e:
-        st.error(f"Prediction failed: {str(e)}")
+        st.warning(f"⚠️ Skipped risk prediction. Model not available or errored. Error: {e}")
 
-# Run bond model independently using selected horizon
-if st.button("📉 Run Bond Model Based on Investment Horizon"):
-    with st.spinner(f"Training model and predicting bond yields for: {investment_horizon}..."):
-        try:
-            forecast_df = predict_bonds(investment_horizon=investment_horizon)
+# PPO RL Model Integration
+if st.button("📊 Generate Portfolio Allocation"):
+    with st.spinner("Running reinforcement learning model..."):
+        result = subprocess.run(["python3", "run_rl.py"], capture_output=True, text=True)
+
+        if result.returncode == 0:
+            st.success("✅ Portfolio allocation completed!")
+
+            df = pd.read_csv("rl_results.csv")
+            df["Asset"] = df["Asset"].str.replace("_price_change", "", regex=False)
+
+            def classify_asset(asset):
+                if asset in [
+                    "10-Year US Treasury", "5-Year US Treasury", "30-Year US Treasury",
+                    "Corporate Bonds (LQD)", "High-Yield Bonds (HYG)", "Municipal Bonds (MUB)"
+                ]:
+                    return "Bonds"
+                else:
+                    return "Precious Metals"
+
+            df["Category"] = df["Asset"].apply(classify_asset)
+
+            fig = px.sunburst(
+                df,
+                path=["Category", "Asset"],
+                values="Allocation (%)",
+                title="Recommended Portfolio Allocation",
+                color="Category",
+                color_discrete_map={
+                    "Bonds": "#1f77b4",
+                    "Precious Metals": "#ff7f0e"
+                }
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+            st.subheader("📋 Portfolio Allocation (%)")
+            st.dataframe(df)
+
+        else:
+            st.error("❌ RL model failed.")
+            st.text(result.stderr)
+
+"""
 
 
-            # Ensure Date is a column
-            if forecast_df.index.name is not None:
-                forecast_df = forecast_df.reset_index()
-            if 'Date' not in forecast_df.columns:
-                forecast_df.rename(columns={forecast_df.columns[0]: 'Date'}, inplace=True)
-
-            forecast_df['Date'] = pd.to_datetime(forecast_df['Date'], errors='coerce')
-
-            st.success("✅ Bond yield forecast completed!")
-            st.subheader("📈 Forecasted Bond Yields")
-            st.dataframe(forecast_df.head(5).style.format("{:.2f}"))
-
-            # Plotting multiple yield curves
-            st.subheader("📊 Yield Curves by Bond Type")
-            yield_columns = [
-                '10-Year US Treasury', '5-Year US Treasury', '30-Year US Treasury',
-    'Corporate Bonds (LQD)', 'High-Yield Bonds (HYG)', 'Municipal Bonds (MUB)'
-            ]
-            melted_df = forecast_df.melt(id_vars='Date', value_vars=yield_columns,
-                                          var_name='Bond Type', value_name='Yield')
-
-            import matplotlib.pyplot as plt
-            fig, ax = plt.subplots(figsize=(10, 6))
-            for bond in melted_df['Bond Type'].unique():
-                subset = melted_df[melted_df['Bond Type'] == bond]
-                ax.plot(subset['Date'], subset['Yield'], label=bond)
-            ax.set_xlabel("Date")
-            ax.set_ylabel("Yield (%)")
-            ax.set_title("Forecasted Bond Yield Curves")
-            ax.legend(loc='upper left', fontsize='small')
-            ax.grid(True)
-            st.pyplot(fig)
-
-        except Exception as e:
-            st.error(f"❌ Failed to forecast bonds: {e}")
-
+# Write app.py
+with open("app.py", "w") as f:
+    f.write(app_code)
 
 # STEP 3: Launch Streamlit App
-import time
-import os
 os.makedirs("inputs", exist_ok=True)
 ngrok.kill()
-!streamlit run app.py &>/dev/null &
+subprocess.Popen(["streamlit", "run", "app.py"])
 time.sleep(3)
 public_url = ngrok.connect(8501)
 print(f"🌐 Your app is live at: {public_url}")
+
