@@ -17,7 +17,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#license">License</a></li>
+    <li><a href="#data-access">Data Access</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -91,10 +91,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 
-<!-- LICENSE -->
-### License
+<!-- DATA ACCESS -->
+### Data Access
 STILL NEED TO UPDATE
-Distributed under the project_license. See `LICENSE.txt` for more information.
+A data access statement indicating how to access the data or explaining who owns the data. Licenses for data use and redistribution are respected.
 
 
 
