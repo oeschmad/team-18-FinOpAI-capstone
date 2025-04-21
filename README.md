@@ -62,7 +62,7 @@ STILL NEED TO UPDATE
 1. Get a free API Key at [https://example.com](https://example.com)
 2. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/oeschmad/team-18-FinOpAI-capstone.git
    ```
 3. Install NPM packages
    ```sh
