@@ -64,9 +64,9 @@ STILL NEED TO UPDATE
    ```sh
    git clone https://github.com/oeschmad/team-18-FinOpAI-capstone.git
    ```
-3. Install NPM packages
+3. Install required packages from requirements.txt
    ```sh
-   npm install
+   pip install -r requirements.txt
    ```
 4. Enter your API in `config.js`
    ```js
