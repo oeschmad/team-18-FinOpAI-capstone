@@ -70,7 +70,7 @@ STILL NEED TO UPDATE
    ```
 4. Enter your API in `app.py`
    ```js
-   const API_KEY = 'ENTER YOUR API';
+   NGROK_AUTH_TOKEN = "enter"  # Replace with your token
    ```
 5. Run app.py
 
