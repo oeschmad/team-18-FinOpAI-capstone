@@ -28,7 +28,7 @@ from ppo import PPOAgent
 
 # Set page config
 st.set_page_config(page_title="AI Asset Allocator", layout="wide")
-st.title("🛡️ AI-Powered Asset Allocation Advisor")
+st.title("AI-Powered Asset Allocation Advisor")
 
 # 1. Basic Info
 st.header("👤 Personal Information")
@@ -39,10 +39,10 @@ marital_status = st.selectbox("Marital Status", options=["Single", "Married", "D
 marital_change = st.selectbox("Marital Status Change (past year)", options=[0, 1, 2, 3])
 
 # 2. Financial Profile
-st.header("💼 Financial Profile")
+st.header("Financial Profile")
 income = st.number_input("Annual Income ($)", min_value=0, step=1000)
 
-st.markdown("### 💳 Credit Score")
+st.markdown("### Credit Score")
 credit_score = st.slider("Credit Score", min_value=300, max_value=850, value=700)
 
 loan_amount = st.number_input("Loan Amount ($)", min_value=0, step=500)
@@ -51,7 +51,7 @@ employment_status = st.selectbox("Employment Status", options=["Employed", "Unem
 years_at_job = st.slider("Years at Current Job", min_value=0, max_value=50, value=5)
 payment_history = st.selectbox("Payment History", options=["Good", "Fair", "Poor"])
 
-st.markdown("### 📊 Debt-to-income ratio")
+st.markdown("### Debt-to-income ratio")
 monthly_debt = st.number_input("Monthly Debt Payments ($)", min_value=0)
 monthly_income = st.number_input("Monthly Gross Income ($)", min_value=1)
 dti = round(monthly_debt / monthly_income, 2)
@@ -60,7 +60,7 @@ st.success(f"Calculated DTI: {dti:.2f}")
 assets_value = st.number_input("Total Asset Value ($)", min_value=0, step=1000)
 
 # 3. Background
-st.header("🌍 Background")
+st.header("Background")
 dependents = st.slider("Number of Dependents", min_value=0, max_value=10, value=0)
 city = st.text_input("City")
 state = st.text_input("State")
@@ -68,14 +68,14 @@ country = st.text_input("Country")
 prev_defaults = st.slider("Previous Loan Defaults", min_value=0, max_value=5, value=0)
 
 # 4. Investment Profile
-st.header("📈 Investment Preferences")
+st.header("Investment Preferences")
 investment_horizon = st.selectbox("Select your investment horizon:", [
     "1 Day", "3 Days", "5 Days", "1 Week", "10 Days", "2 Weeks",
     "1 Month", "3 Months", "6 Months", "1 Year", "2 Years", "3 Years"
 ])
 
 
-submit = st.button("✅ Submit and Predict Risk Rating")
+submit = st.button("Submit and Predict Risk Rating")
 if submit:
     # Save input to CSV
     input_df = pd.DataFrame([{
@@ -103,22 +103,22 @@ if submit:
 
     os.makedirs("inputs", exist_ok=True)
     input_df.to_csv("inputs/risk_input.csv", index=False)
-    st.info("✅ Saved input to `inputs/risk_input.csv`")
+    st.info("Saved input to `inputs/risk_input.csv`")
 
     # Predict risk (optional)
     try:
         rating = predict_risk()
-        st.success(f"🧮 Predicted Risk Rating: **{rating}**")
+        st.success(f"Predicted Risk Rating: **{rating}**")
     except Exception as e:
-        st.warning(f"⚠️ Skipped risk prediction. Model not available or errored. Error: {e}")
+        st.warning(f"Skipped risk prediction. Model not available or errored. Error: {e}")
 
 # PPO RL Model Integration
-if st.button("📊 Generate Portfolio Allocation"):
+if st.button("Generate Portfolio Allocation"):
     with st.spinner("Running reinforcement learning model..."):
         result = subprocess.run(["python3", "run_rl.py"], capture_output=True, text=True)
 
         if result.returncode == 0:
-            st.success("✅ Portfolio allocation completed!")
+            st.success("Portfolio allocation completed!")
 
             df = pd.read_csv("rl_results.csv")
             df["Asset"] = df["Asset"].str.replace("_price_change", "", regex=False)
@@ -185,7 +185,7 @@ if st.button("📊 Generate Portfolio Allocation"):
             st.dataframe(df)
 
         else:
-            st.error("❌ RL model failed.")
+            st.error(" RL model failed.")
             st.text(result.stderr)
 
 
