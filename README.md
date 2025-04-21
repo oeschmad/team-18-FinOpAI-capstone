@@ -90,7 +90,7 @@ Team members:
 Madeline Oesch (oeschmad@umich.edu),
 Ramya Prakash (ramyapk@umich.edu),
 Aniruddh Aithal (aithalan@umich.edu),
-Brooke Lee (brojlee@umich.edu)
+Brooks Lee (brojlee@umich.edu)
 
 Project Link: https://github.com/oeschmad/team-18-FinOpAI-capstone
 
