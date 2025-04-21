@@ -46,7 +46,7 @@ The system aims to: <br />
 Follow the steps below to run the project
 #### Installation
 
-1. Get a free API Key at [(https://dashboard.ngrok.com/get-started/your-authtoken)]((https://dashboard.ngrok.com/get-started/your-authtoken))
+1. Get a free API Key at https://dashboard.ngrok.com/get-started/your-authtoken
 2. Clone the repo
    ```sh
    git clone https://github.com/oeschmad/team-18-FinOpAI-capstone.git
@@ -76,9 +76,9 @@ Below is an example of what the dashboard will output for the portfolio allocati
 
 <!-- DATA ACCESS -->
 ### Data Access
-The stock market, precious metals, and crypto data was accessed using the yfinance API, which offers a Pythonic way to fetch financial & market data from Yahoo!Ⓡ finance
+The stock market, precious metals, and crypto data was accessed using the yfinance API, which offers a Pythonic way to fetch financial & market data from Yahoo!Ⓡ finance (https://pypi.org/project/yfinance/)
 
-The economic and bond data was accessed using the Federal Reserve Economic Data (FRED) API, which is a web service that allows developers to write programs and build applications that retrieve economic data from the FRED® and ALFRED® websites hosted by the Economic Research Division of the Federal Reserve Bank of St. Louis.
+The economic and bond data was accessed using the Federal Reserve Economic Data (FRED) API, which is a web service that allows developers to write programs and build applications that retrieve economic data from the FRED® and ALFRED® websites hosted by the Economic Research Division of the Federal Reserve Bank of St. Louis. (https://fred.stlouisfed.org/docs/api/fred/)
 
 
 
