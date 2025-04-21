@@ -18,6 +18,8 @@ import subprocess
 import plotly.express as px
 from PIL import Image
 import time
+import plotly.graph_objects as go
+
 
 from predict_risk import predict_risk
 from prepare_feature_matrix import prepare_feature_matrix
@@ -122,28 +124,62 @@ if st.button("📊 Generate Portfolio Allocation"):
             df["Asset"] = df["Asset"].str.replace("_price_change", "", regex=False)
 
             def classify_asset(asset):
-                if asset in [
-                    "10-Year US Treasury", "5-Year US Treasury", "30-Year US Treasury",
-                    "Corporate Bonds (LQD)", "High-Yield Bonds (HYG)", "Municipal Bonds (MUB)"
-                ]:
-                    return "Bonds"
-                else:
-                    return "Precious Metals"
+                  if asset in [
+                      "10-Year US Treasury", "5-Year US Treasury", "30-Year US Treasury",
+                      "Corporate Bonds (LQD)", "High-Yield Bonds (HYG)", "Municipal Bonds (MUB)"
+                  ]:
+                      return "Bonds"
+                  elif asset in [
+                      "gold", "silver", "platinum", "palladium"
+                  ]:
+                      return "Precious Metals"
+                  elif asset in [
+                      "BTC-USD", "ETH-USD", "BNB-USD", "SOL-USD"
+                  ]:
+                      return "Cryptocurrency"
+                  elif asset in [
+                      'AAPL', 'MSFT', 'NVDA', 'JPM', 'BAC', 'WFC', 'JNJ', 'LLY', 'PFE',
+                      'A', 'TSLA', 'HD', 'PG', 'KO', 'PEP', 'CAT', 'BA', 'DE', 'XOM',
+                      'CVX', 'SLB', 'DUK', 'SO', 'NEE', 'LIN', 'SHW', 'FCX', 'GOOGL',
+                      'META', 'DIS'
+                  ]:
+                      return "Stocks"
+                  else:
+                      return "Other"
+
 
             df["Category"] = df["Asset"].apply(classify_asset)
 
-            fig = px.sunburst(
-                df,
-                path=["Category", "Asset"],
-                values="Allocation (%)",
-                title="Recommended Portfolio Allocation",
-                color="Category",
+        # Aggregate allocation by category
+
+
+            category_allocation = df.groupby('Category')['Allocation (%)'].sum().reset_index()
+
+            # Create the pie chart
+            fig = px.pie(
+                category_allocation,
+                names='Category',
+                values='Allocation (%)',
+                title="Recommended Portfolio Allocation by Category",
+                color='Category',
                 color_discrete_map={
                     "Bonds": "#1f77b4",
-                    "Precious Metals": "#ff7f0e"
-                }
+                    "Precious Metals": "#ff7f0e",
+                    "Cryptocurrency": "#d62728",
+                    "Stocks": "#2ca02c",
+                    "Other": "#7f7f7f"
+                },
+                hover_data=['Allocation (%)'],
+                labels={'Allocation (%)':'Allocation'}
             )
+            fig.update_traces(textinfo='percent+label')
             st.plotly_chart(fig, use_container_width=True)
+
+            # Display individual stock allocations below the main chart
+            stocks_df = df[df['Category'] == 'Stocks']
+            if not stocks_df.empty:
+                st.subheader("Individual Stock Allocation (%)")
+                st.dataframe(stocks_df)
 
             st.subheader("📋 Portfolio Allocation (%)")
             st.dataframe(df)
@@ -151,6 +187,7 @@ if st.button("📊 Generate Portfolio Allocation"):
         else:
             st.error("❌ RL model failed.")
             st.text(result.stderr)
+
 
 """
 
