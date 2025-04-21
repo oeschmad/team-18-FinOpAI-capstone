@@ -18,7 +18,6 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#data-access">Data Access</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -67,19 +66,19 @@ Follow the steps below to run the project
 
 <!-- USAGE EXAMPLES -->
 ### Usage
-STILL NEED TO UPDATE
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Below is an example of what the dashboard will output for the portfolio allocation:
 
+<img width="1091" alt="Screenshot 2025-04-21 at 2 10 37 PM" src="https://github.com/user-attachments/assets/2fd6b364-db3b-4ce1-ae7f-e628d3a759ca" />
 
-_For more examples, please refer to the [Documentation](https://example.com)_
-
+<img width="900" alt="Screenshot 2025-04-21 at 2 11 44 PM" src="https://github.com/user-attachments/assets/8841b430-d7bc-4372-aa77-44315ffaae7f" />
 
 
 
 <!-- DATA ACCESS -->
 ### Data Access
-STILL NEED TO UPDATE
-A data access statement indicating how to access the data or explaining who owns the data. Licenses for data use and redistribution are respected.
+The stock market, precious metals, and crypto data was accessed using the yfinance API, which offers a Pythonic way to fetch financial & market data from Yahoo!Ⓡ finance
+
+The economic and bond data was accessed using the Federal Reserve Economic Data (FRED) API, which is a web service that allows developers to write programs and build applications that retrieve economic data from the FRED® and ALFRED® websites hosted by the Economic Research Division of the Federal Reserve Bank of St. Louis.
 
 
 
@@ -97,11 +96,4 @@ Project Link: https://github.com/oeschmad/team-18-FinOpAI-capstone
 
 
 
-
-<!-- ACKNOWLEDGMENTS -->
-### Acknowledgments
-
-* []()
-* []()
-* []()
 
